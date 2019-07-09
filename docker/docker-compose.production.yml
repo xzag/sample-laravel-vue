@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  fullstack-test-php:
+    build: php-prod
+    working_dir: /app
+    volumes:
+      - ./..:/app
+    networks:
+      - fullstack-test-net
+
+  fullstack-test-web:
+    image: nginx
+    ports:
+      - 80:80
+    working_dir: /app
+    volumes:
+      - ./..:/app
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - fullstack-test-net
+
+  fullstack-test-db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - fullstack-test-net
+
+networks:
+  fullstack-test-net:
